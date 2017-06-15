@@ -22,7 +22,7 @@ In this repo is the file [`rushing.json`](/rushing.json). It contains data about
 * `Avg` (Rushing Average Yards Per Attempt)
 * `Yds/G` (Rushing Yards Per Game)
 * `TD` (Total Rushing Touchdowns)
-* `Lng` (Longest Rush)
+* `Lng` (Longest Rush -- a `T` represents a touchdown occurred)
 * `1st` (Rushing First Downs)
 * `1st%` (Rushing First Down Percentage)
 * `20+` (Rushing 20+ Yards Each)
@@ -33,8 +33,9 @@ In this repo is the file [`rushing.json`](/rushing.json). It contains data about
 1. Create a web app. This must be able to do the following steps
     1. Create a webpage which displays a table with the contents of `rushing.json`
     2. The user should be able to sort the players by _Total Rushing Yards_, _Longest Rush_ and _Total Rushing Touchdowns_
-    3. The user should be able to download the sorted data as a CSV
-    4. The user should be able to search for a player
+    3. The user should be able to filter by the player's name
+    4. The user should be able to download the sorted/filtered data as a CSV
+
 2. Update the section `Installation and running this solution` in the README file explaining how to run your code
 
 ### Submitting a solution
