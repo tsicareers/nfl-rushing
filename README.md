@@ -1,7 +1,7 @@
 # theScore "the Rush" Interview Question
 At theScore, we are always looking for intelligent, resourceful, full-stack developers to join our growing team. To help us evaluate new talent, we have created this take-home interview question. This question should take you no more than a few hours.
 
-All candidates must complete this before the possibility of an in-person interview.
+**All candidates must complete this before the possibility of an in-person interview. During the in-person interview, your submitted project will be used as the base for further extensions.**
 
 ### Why a take-home interview?
 In-person coding interviews can be stressful and can hide some people's full potential. A take-home gives you a chance work in a less stressful environment and showcase your talent.
