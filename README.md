@@ -14,7 +14,7 @@ As outlined in our job description, you will come across technologies which incl
 ### Understanding the problem
 In this repo is the file [`rushing.json`](/rushing.json). It contains data about NFL players' rushing statistics. Each entry contains the following information
 * `Player` (Player's name)
-* `Team` (Player's team abreviation)
+* `Team` (Player's team abbreviation)
 * `Pos` (Player's postion)
 * `Att/G` (Rushing Attempts Per Game Average)
 * `Att` (Rushing Attempts)
