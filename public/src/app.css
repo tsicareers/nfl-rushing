@@ -1,0 +1,32 @@
+.nfl-players {
+    /* min-width: 400px;
+    max-width: 1500px; */
+    width: 100%;
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.nfl-players-table {
+    border-collapse: collapse;
+    width: 100%;
+    border-bottom: 2px solid;
+    /* border: 2px solid; */
+}
+
+/* targeting table head rows */
+.nfl-players-table thead tr, 
+.nfl-players-table tfoot tr {
+    background:  rgba(81, 0, 128, 0.384);
+    color: blue;
+}
+
+/* targeting all columns in table - including header columns */
+.nfl-players-table th,
+.nfl-players-table td {
+    text-align: left;
+    padding: 9px 18px;
+}
+
+.nfl-players-table tbody tr:nth-of-type(even) {
+    background: grey;
+}
