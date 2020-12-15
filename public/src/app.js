@@ -1,11 +1,10 @@
-// const { table } = require("console");
-
 {
     // initial housecleaning..
     for (const tableDiv of document.querySelectorAll(".nfl-players[data-url")) {
         // var table = document.getElementById("nfl-players-table");
         const table = document.createElement("table");
 
+        table.id = "myTable";
         table.classList.add("nfl-players-table", "sortable");
         // sorttable.makeSortable(table);
 
@@ -17,11 +16,11 @@
                 <th class="sorttable_nosort" title="Player's Position">Pos</th>
                 <th class="sorttable_nosort" title="Rushing Attempts">Att</th>
                 <th class="sorttable_nosort" title="Rushing Attempts Per Game Average">Att/G</th>
-                <th title="Total Rushing Yards">Yds</th>
+                <th title="Total Rushing Yards" style="cursor: pointer;">Yds</th>
                 <th class="sorttable_nosort" title="Rushing Yards Per Game">Yds/G</th>
                 <th class="sorttable_nosort" title="Rushing Average Yards Per Game">Avg</th>
-                <th title="Total Rushing Touchdowns">TD</th>
-                <th title="Longest Rush -- a T represents a touchdown occured">Lng</th>
+                <th title="Total Rushing Touchdowns" style="cursor: pointer;">TD</th>
+                <th title="Longest Rush -- a T represents a touchdown occured" style="cursor: pointer;">Lng</th>
                 <th class="sorttable_nosort" title="Rushing First Downs">1st</th>
                 <th class="sorttable_nosort" title="Rushing First Down Percentage">1st%</th>
                 <th class="sorttable_nosort" title="Rushing 20+ Yards Each">20+</th>
@@ -92,6 +91,29 @@
 
                 var cell = row.insertCell();
                 cell.innerHTML = object[property];
+            }
+        }
+    }
+
+    /**
+     * search table on player name column
+     */
+    function searchPlayers() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchPlayers");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0]; // gets the player name columns
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else { // row should be filtered out
+                    tr[i].style.display = "none";
+                }
             }
         }
     }
