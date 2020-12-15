@@ -9,24 +9,24 @@
     <body>
         
         <div class="nfl-players" data-url="/data">
-            <table class = "nfl-players-table table table-sortable">
+            <table class="nfl-players-table sortable" width="100%">
                 <thead>
                     <tr>
-                        <th>Player Name</th>
-                        <th>Team</th>
-                        <th title="Player's Position">Pos</th>
-                        <th title="Rushing Attempts">Att</th>
-                        <th title="Rushing Attempts Per Game Average">Att/G</th>
+                        <th class="sorttable_nosort">Player Name</th>
+                        <th class="sorttable_nosort">Team</th>
+                        <th class="sorttable_nosort" title="Player's Position">Pos</th>
+                        <th class="sorttable_nosort" title="Rushing Attempts">Att</th>
+                        <th class="sorttable_nosort" title="Rushing Attempts Per Game Average">Att/G</th>
                         <th title="Total Rushing Yards">Yds</th>
-                        <th title="Rushing Yards Per Game">Yds/G</th>
-                        <th title="Rushing Average Yards Per Game">Avg</th>
+                        <th class="sorttable_nosort" title="Rushing Yards Per Game">Yds/G</th>
+                        <th class="sorttable_nosort" title="Rushing Average Yards Per Game">Avg</th>
                         <th title="Total Rushing Touchdowns">TD</th>
                         <th title="Longest Rush -- a T represents a touchdown occured">Lng</th>
-                        <th title="Rushing First Downs">1st</th>
-                        <th title="Rushing First Down Percentage">1st%</th>
-                        <th title="Rushing 20+ Yards Each">20+</th>
-                        <th title="Rushing 40+ Yards Each">40+</th>
-                        <th title="Rushing Fumbles">FUM</th>
+                        <th class="sorttable_nosort" title="Rushing First Downs">1st</th>
+                        <th class="sorttable_nosort" title="Rushing First Down Percentage">1st%</th>
+                        <th class="sorttable_nosort" title="Rushing 20+ Yards Each">20+</th>
+                        <th class="sorttable_nosort" title="Rushing 40+ Yards Each">40+</th>
+                        <th class="sorttable_nosort" title="Rushing Fumbles">FUM</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -81,6 +81,23 @@
                         <td>0</td>
                         <td>0</td>
                     </tr>
+                    <tr>
+                        <td>Charlie Whitehurst</td>
+                        <td>CLE</td>
+                        <td>QB</td>
+                        <td>2</td>
+                        <td>2</td>
+                        <td>1</td>
+                        <td>0.5</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>2</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
                 </tbody>
                 <tfoot>
                     <tr>
@@ -105,5 +122,6 @@
         </div>
 
         <script src="./src/app.js"></script>
+        <script src="./src/sorttable.js"></script>
     </body>
 </html>
