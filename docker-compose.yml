@@ -1,0 +1,10 @@
+version: '3'
+
+services: 
+  praise-website-solution:
+    build: .
+    volumes: 
+      - .:/usr/src/app
+    ports: 
+      - 5001:5001
+    

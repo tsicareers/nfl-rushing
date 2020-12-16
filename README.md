@@ -54,4 +54,9 @@ We will evaluate you on your ability to solve the problem defined in the require
 If you have any questions regarding requirements, do not hesitate to email your contact at theScore for clarification.
 
 ### Installation and running this solution
-... TODO
+Application can run on docker. To run the application from pull request:
+1. get the changes locally on a system that has docker running
+2. navigate to directory where docker-compose.yml file is and run command 'docker-compose up'
+3. webpage should be available on http://localhost:5001
+4. if you want to run locally, navigate to directory where package.json is and run commanf 'npm run start' (need npm installed)
+5. same expectation as step 3 above :)
