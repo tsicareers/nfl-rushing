@@ -22,6 +22,10 @@
         anchorElement.download = "nfl-players.csv";
         anchorElement.click();
 
+        // Debug - praise
+        // console.log(convertToCSV(rows));
+        // convertToCSV(rows);
+
         setTimeout(() => {
             URL.revokeObjectURL(blobURL);
         }, 500);
@@ -29,7 +33,8 @@
     }
 
     /**
-     * Loop through array of table rows and extract cell content
+     * Loop through array of table rows and extract cell content.
+     * Check for style="display: none" and exclude those rows - this is for filtered tables
      * 
      * @param {Array of table rows} rows 
      */
@@ -38,20 +43,28 @@
         const numOfColumns = 15;
 
         for (const row of rows) {
-            let line = "";
+            var line = "";
+            // var skipRow = shouldSkipRow(row.getAttribute("style"));
+            var skipRow = row.getAttribute("style");
             // console.log(row.children);
+            // console.log(row.getAttribute("style"));
+            // console.log(skipRow);
 
-            for (let i = 0; i < numOfColumns; i++) {
-                if (row.children[i] !== undefined) {
-                    line += parseCell(row.children[i]);
+            if(String(skipRow) !== "display: none;") {
+                // console.log("skipRow = " + skipRow + " . <-- should not be true");
+                for (let i = 0; i < numOfColumns; i++) {
+                    if (row.children[i] !== undefined) {
+                        line += parseCell(row.children[i]);
+                    }
+                    line += (i !== (numOfColumns -1)) ? "," : "";
                 }
-                line += (i !== (numOfColumns -1)) ? "," : "";
+
+                lines.push(line);
             }
 
-            lines.push(line);
+            // lines.push(line);
         }
 
-        // console.log(lines.join("\n"));
         return lines.join("\n");
     }
 
