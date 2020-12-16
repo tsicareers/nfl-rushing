@@ -8,12 +8,14 @@
     </head>
     <body>
         
-        <div>
-            <input type="text" id="searchPlayers" onkeyup="searchPlayers()" placeholder="Search player name...">
-            <button type="submit" id="downloadCSV" onclick="exportToCsv('myTable');">Download as CSV</button>
-        </div>
+        <div class="pageContainer">
+            <div class="topContainer">
+                <input type="text" id="searchPlayers" onkeyup="searchPlayers()" placeholder="Search player name...">
+                <button type="submit" id="downloadCSV" onclick="exportToCsv('myTable');">Download as CSV</button>
+            </div>
 
-        <div class="nfl-players" data-url="/data"></div>
+            <div class="nfl-players" data-url="/data"></div>
+        </div>
 
         <script src="./src/sorttable.js"></script>
         <script src="./src/exportcsv.js"></script>

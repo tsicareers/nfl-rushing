@@ -1,21 +1,31 @@
-#searchPlayers {
-    width: 90%;
-    height: 25px;
+.topContainer {
+    top: 0;
     position: fixed;
-    top: 5px;
+    width: 100%;
+    background: black;
+}
+
+#searchPlayers {
+    width: 85%;
+    height: 25px;
+    /* position: fixed; */
+    /* top: 5px; */
     font-family: Arial, Helvetica, sans-serif;
 }
 
 #downloadCSV {
-    width: 10%;
+    width: 14%;
+    height: 31px;
     float: right;
 }
 
 .nfl-players {
     /* min-width: 400px;
     max-width: 1500px; */
-    margin-top: 20px;
+    margin-top: 35px;
     width: 100%;
+    height: 850px; /* only looks nice when displayed in full screen */
+    overflow: auto;
     font-size: 14px;
     font-family: Arial, Helvetica, sans-serif;
 }
