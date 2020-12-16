@@ -1,15 +1,20 @@
 #searchPlayers {
-    width: 100%;
+    width: 90%;
     height: 25px;
     position: fixed;
     top: 5px;
     font-family: Arial, Helvetica, sans-serif;
 }
 
+#downloadCSV {
+    width: 10%;
+    float: right;
+}
+
 .nfl-players {
     /* min-width: 400px;
     max-width: 1500px; */
-    margin-top: 40px;
+    margin-top: 20px;
     width: 100%;
     font-size: 14px;
     font-family: Arial, Helvetica, sans-serif;
@@ -40,6 +45,6 @@
     background: lightgrey;
 }
 
-.nfl-players-table tr:hover {
+.nfl-players-table > tbody tr:hover {
     background-color: #f1f1f1;
 }
