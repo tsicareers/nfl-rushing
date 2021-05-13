@@ -1,0 +1,35 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  team_abv: MyString
+  position: MyString
+  attempts: 
+  attempts_per_game: 1.5
+  rushing_yards: 
+  rushing_yards_per_attempt: 1.5
+  rushing_yards_per_game: 1.5
+  touchdowns: 
+  longest_rush: MyString
+  rushing_first_down: 
+  rushing_first_down_percentage: 1.5
+  rushing_20_more: 
+  rushing_30_more: 
+  fumble: 
+
+two:
+  name: MyString
+  team_abv: MyString
+  position: MyString
+  attempts: 
+  attempts_per_game: 1.5
+  rushing_yards: 
+  rushing_yards_per_attempt: 1.5
+  rushing_yards_per_game: 1.5
+  touchdowns: 
+  longest_rush: MyString
+  rushing_first_down: 
+  rushing_first_down_percentage: 1.5
+  rushing_20_more: 
+  rushing_30_more: 
+  fumble: 

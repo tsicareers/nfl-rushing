@@ -13,3 +13,31 @@
  *= require_tree .
  *= require_self
  */
+ .pagination {
+  display: flex;
+  list-style: none;
+}
+
+.pagination a {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #e89d14;
+  color: #e89d14;
+  margin: 5px;
+}
+
+.pagination__link {
+  font-weight: bold;
+  margin: 5px;
+}
+
+.pagination__link--active a {
+  color: #fff;
+  background: #e89d14;
+  cursor: pointer;
+}
+
+.pagination__link--disabled a {
+  color: rgb(198, 197, 202);
+  border: 1px solid rgb(198, 197, 202);
+}
