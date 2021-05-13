@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import fetchPlayers from '../../store/player/actions/fetch_players';
 import SmartTable from './smart_table';
+import { Button } from '@material-ui/core';
 
 class PlayersContainer extends Component {
   constructor(props) {
     super(props);
     this.handlePageNumberClick = this.handlePageNumberClick.bind(this);
     this.handleSorting = this.handleSorting.bind(this);
+    this.handleDownload = this.handleDownload.bind(this);
     this.state = {
       sort: null,
       sort_dir: null
@@ -51,6 +53,34 @@ class PlayersContainer extends Component {
     this.props.fetchPlayers(args);
   }
 
+  handleDownload() {
+    const { sort, sort_dir } = this.state;
+    const queryParams = {};
+
+    if(sort) {
+      queryParams["sort"] = sort
+    }
+    if(sort_dir) {
+      queryParams["sort_dir"] = sort_dir
+    }
+    const formValues = this.props.filterForm;
+    if(formValues && formValues.values && formValues.values.name) {
+      queryParams["name"] = formValues.values.name
+    }
+
+    const qs = Object.keys(queryParams)
+                      .map(key => `${key}=${queryParams[key]}`)
+                      .join('&');
+    console.log(qs);
+    console.log(queryParams);
+
+    const link = document.createElement('a');
+    link.href = "/api/v1/players.csv?" + qs;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   render() {
     const {
       isFetching,
@@ -71,12 +101,21 @@ class PlayersContainer extends Component {
       return <div className ="default-div"><h5>No players found with the current applied filters.</h5><h6>Try applying different filters.</h6></div>;
     }
     return (
-      <SmartTable
-        players={players}
-        playerMeta={playerMeta}
-        handlePageNumberClick={this.handlePageNumberClick}
-        handleSorting={this.handleSorting}
-    />
+      <div>
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          onClick={this.handleDownload}
+        >
+          Download to CSV
+        </Button> 
+        <SmartTable
+          players={players}
+          playerMeta={playerMeta}
+          handlePageNumberClick={this.handlePageNumberClick}
+          handleSorting={this.handleSorting}/>
+      </div>
   );
   }
 }
