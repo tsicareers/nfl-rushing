@@ -24,5 +24,5 @@ rushings.each do |params|
     'fumble' => params['FUM'],
   }
 
-  player = Player.create(rushing)
+  Player.create(rushing)
 end

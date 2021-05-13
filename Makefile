@@ -5,15 +5,19 @@ build:
 
 .PHONY: start
 start:
-	docker-compose up
+	docker-compose up -d app
 
 .PHONY: stop
 stop:
 	docker-compose down
 
+.PHONY: webpack_compile
+webpack_compile:
+	docker-compose run app yarn && rm -rf /app/public/packs && bin/webpack
+
 .PHONY: cleanup
 cleanup:
-	docker-compose run app rubocop -A
+	docker-compose run app rubocop -a
 
 .PHONY: seed_db
 seed_db:

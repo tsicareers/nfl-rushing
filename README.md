@@ -57,8 +57,9 @@ If you have any questions regarding requirements, do not hesitate to email your 
 1. Clone the repo `git clone https://github.com/mtrepanier/nfl-rushing.git && cd ./nfl-rushing` 
 2. Build the project - `make build`
 3. Seed the database - `make seed_db`
-4. Start the project - `make start`
-5. Stop the project - `make stop`
+4. Compile webpack - `make webpack_compile`
+5. Start the project - `make start`
+6. Stop the project - `make stop`
 
 ### Maintenance
 #### Rubocop
