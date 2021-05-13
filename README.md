@@ -1,24 +1,66 @@
-# README
+# theScore "the Rush" Interview Challenge
+At theScore, we are always looking for intelligent, resourceful, full-stack developers to join our growing team. To help us evaluate new talent, we have created this take-home interview question. This question should take you no more than a few hours.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+**All candidates must complete this before the possibility of an in-person interview. During the in-person interview, your submitted project will be used as the base for further extensions.**
 
-Things you may want to cover:
+### Why a take-home challenge?
+In-person coding interviews can be stressful and can hide some people's full potential. A take-home gives you a chance work in a less stressful environment and showcase your talent.
 
-* Ruby version
+We want you to be at your best and most comfortable.
 
-* System dependencies
+### A bit about our tech stack
+As outlined in our job description, you will come across technologies which include a server-side web framework (like Elixir/Phoenix, Ruby on Rails or a modern Javascript framework) and a front-end Javascript framework (like ReactJS)
 
-* Configuration
+### Challenge Background
+We have sets of records representing football players' rushing statistics. All records have the following attributes:
+* `Player` (Player's name)
+* `Team` (Player's team abbreviation)
+* `Pos` (Player's postion)
+* `Att/G` (Rushing Attempts Per Game Average)
+* `Att` (Rushing Attempts)
+* `Yds` (Total Rushing Yards)
+* `Avg` (Rushing Average Yards Per Attempt)
+* `Yds/G` (Rushing Yards Per Game)
+* `TD` (Total Rushing Touchdowns)
+* `Lng` (Longest Rush -- a `T` represents a touchdown occurred)
+* `1st` (Rushing First Downs)
+* `1st%` (Rushing First Down Percentage)
+* `20+` (Rushing 20+ Yards Each)
+* `40+` (Rushing 40+ Yards Each)
+* `FUM` (Rushing Fumbles)
 
-* Database creation
+In this repo is a sample data file [`rushing.json`](/rushing.json).
 
-* Database initialization
+##### Challenge Requirements
+1. Create a web app. This must be able to do the following steps
+    1. Create a webpage which displays a table with the contents of [`rushing.json`](/rushing.json)
+    2. The user should be able to sort the players by _Total Rushing Yards_, _Longest Rush_ and _Total Rushing Touchdowns_
+    3. The user should be able to filter by the player's name
+    4. The user should be able to download the sorted data as a CSV, as well as a filtered subset
+    
+2. The system should be able to potentially support larger sets of data on the order of 10k records.
 
-* How to run the test suite
+3. Update the section `Installation and running this solution` in the README file explaining how to run your code
 
-* Services (job queues, cache servers, search engines, etc.)
+### Submitting a solution
+1. Download this repo
+2. Complete the problem outlined in the `Requirements` section
+3. In your personal public GitHub repo, create a new public repo with this implementation
+4. Provide this link to your contact at theScore
 
-* Deployment instructions
+We will evaluate you on your ability to solve the problem defined in the requirements section as well as your choice of frameworks, and general coding style.
 
-* ...
+### Help
+If you have any questions regarding requirements, do not hesitate to email your contact at theScore for clarification.
+
+### Installation and running this solution
+1. Clone the repo `git clone https://github.com/mtrepanier/nfl-rushing.git && cd ./nfl-rushing` 
+2. Build the project - `make build`
+3. Seed the database - `make seed_db`
+4. Start the project - `make start`
+5. Stop the project - `make stop`
+
+### Maintenance
+#### Rubocop
+For code cleanup and formatter
+* make cleanup

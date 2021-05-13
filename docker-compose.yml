@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  db: 
+    image: postgres:11
+    environment:
+      POSTGRES_USER: thescore
+      POSTGRES_PASSWORD: password
+    restart: always
+
+  app:
+    image: ${DOCKER_IMAGE_NAME-nfl_rushing}
+    build:
+      context: .
+      args:
+        precompileassets: "not"
+    command: ["./scripts/wait-for-it.sh", "db:5432", "--", "./scripts/start_rails.sh"]
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    links:
+      - db
+    ports:
+      - '3000:3000'
+
+  webpacker:
+    image: ${DOCKER_IMAGE_NAME-nfl_rushing}
+    command: ["./scripts/start_webpack_dev.sh"]
+    volumes:
+      - .:/app
+    ports:
+      - 3035:3035

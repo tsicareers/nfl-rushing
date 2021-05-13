@@ -1,0 +1,279 @@
+inherit_from: .rubocop-http---relaxed-ruby-style-rubocop-yml
+
+require:
+  - rubocop-faker
+  - rubocop-performance
+  - rubocop-rails
+
+AllCops:
+  NewCops: enable
+  DisplayStyleGuide: true
+  DisplayCopNames: true
+  Exclude:
+    - 'db/schema.rb'
+    - 'bin/*'
+    - 'db/migrate/*'
+    - 'node_modules/**/*'
+
+Style/GlobalVars:
+  Enabled: false
+
+Rails/RakeEnvironment:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Layout/DotPosition:
+  Enabled: true
+  EnforcedStyle: trailing
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: true
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: true
+  EnforcedStyleForMultiline: comma
+
+Naming/ConstantName:
+  Enabled: false
+
+Layout/MultilineArrayLineBreaks:
+  Enabled: true
+
+Layout/MultilineHashKeyLineBreaks:
+  Enabled: true
+
+Layout/MultilineMethodArgumentLineBreaks:
+  Enabled: true
+
+Layout/FirstArrayElementLineBreak:
+  Enabled: true
+
+Layout/FirstHashElementLineBreak:
+  Enabled: true
+
+Layout/FirstMethodArgumentLineBreak:
+  Enabled: true
+
+Layout/MultilineAssignmentLayout:
+  Enabled: true
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
+Style/ExponentialNotation:
+  Enabled: true
+
+# 0.83
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+
+# 0.84
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+
+# 0.85
+Lint/MixedRegexpCaptureTypes:
+  Enabled: true
+
+Style/RedundantRegexpEscape:
+  Enabled: true
+
+Style/RedundantRegexpCharacterClass:
+  Enabled: true
+
+Style/SlicingWithRange:
+  Enabled: true
+
+# 0.86
+Style/RedundantFetchBlock:
+  Enabled: true
+
+Style/BisectedAttrAccessor:
+  Enabled: true
+
+Style/RedundantAssignment:
+  Enabled: true
+
+# 0.87
+Style/AccessorGrouping:
+  Enabled: true
+
+# 0.88
+Lint/DuplicateElsifCondition:
+  Enabled: true
+
+Style/ArrayCoercion:
+  Enabled: true
+
+Style/CaseLikeIf:
+  Enabled: true
+
+Style/HashAsLastArrayItem:
+  Enabled: true
+
+Style/HashLikeCase:
+  Enabled: true
+
+Style/RedundantFileExtensionInRequire:
+  Enabled: true
+
+# 0.89
+Lint/BinaryOperatorWithIdenticalOperands:
+  Enabled: true
+
+Lint/DuplicateRescueException:
+  Enabled: true
+
+Lint/EmptyConditionalBody:
+  Enabled: true
+
+Lint/FloatComparison:
+  Enabled: true
+
+Lint/MissingSuper:
+  Enabled: true
+
+Lint/OutOfRangeRegexpRef:
+  Enabled: true
+
+Lint/SelfAssignment:
+  Enabled: true
+
+Lint/TopLevelReturnWithArgument:
+  Enabled: true
+
+Lint/UnreachableLoop:
+  Enabled: true
+
+Style/ExplicitBlockArgument:
+  Enabled: true
+
+Style/GlobalStdStream:
+  Enabled: true
+
+Style/OptionalBooleanParameter:
+  Enabled: true
+
+Style/SingleArgumentDig:
+  Enabled: true
+
+Style/StringConcatenation:
+  Enabled: true
+
+# Perf 1.7
+Performance/AncestorsInclude:
+  Enabled: true
+
+Performance/BigDecimalWithNumericArgument:
+  Enabled: true
+
+Performance/RedundantSortBlock:
+  Enabled: true
+
+Performance/RedundantStringChars:
+  Enabled: true
+
+Performance/ReverseFirst:
+  Enabled: true
+
+Performance/SortReverse:
+  Enabled: true
+
+Performance/Squeeze:
+  Enabled: true
+
+Performance/StringInclude:
+  Enabled: true
+
+# Rails 2.7
+Rails/ActiveRecordCallbacksOrder:
+  Enabled: true
+
+Rails/FindById:
+  Enabled: true
+
+Rails/Inquiry:
+  Enabled: true
+
+Rails/MailerName:
+  Enabled: true
+
+Rails/MatchRoute:
+  Enabled: true
+
+Rails/NegateInclude:
+  Enabled: true
+
+Rails/Pluck:
+  Enabled: true
+
+Rails/PluckInWhere:
+  Enabled: true
+
+Rails/RenderInline:
+  Enabled: true
+
+Rails/RenderPlainText:
+  Enabled: true
+
+Rails/ShortI18n:
+  Enabled: true
+
+Rails/WhereExists:
+  Enabled: true
+
+Rails/Output:
+  Exclude:
+    - lib/tasks/*
+
+Layout/LineLength:
+  Enabled: true
+  Max: 120
+  AutoCorrect: true
+  IgnoredPatterns: ['^\s*#.*']
+  Exclude:
+    - Gemfile
+    - Guardfile
+    - spec/interactors/send_gdpr_response_spec.rb
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*.rb'
+    - 'Guardfile'
+    - 'config/routes.rb'
+    - 'config/environments/*.rb'
+    - 'app/_docs/**/*_doc.rb'
+
+# Offense count: 2
+# Configuration parameters: Database, Include.
+# SupportedDatabases: mysql, postgresql
+# Include: db/migrate/*.rb
+Rails/BulkChangeTable:
+  Exclude:
+    - 'db/migrate/20180212221010_field_changes_for_events.rb'
+    - 'db/migrate/20191205081400_add_partition_range.rb'
+
+# Offense count: 1
+# Configuration parameters: Include.
+# Include: db/migrate/*.rb
+Rails/CreateTableWithTimestamps:
+  Exclude:
+    - 'db/migrate/20190816204945_add_acknowledgements_table.rb'
