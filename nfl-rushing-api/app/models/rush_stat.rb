@@ -1,0 +1,2 @@
+class RushStat < ApplicationRecord
+end

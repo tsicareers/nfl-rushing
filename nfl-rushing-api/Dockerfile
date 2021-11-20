@@ -8,6 +8,7 @@ EXPOSE 3000
 
 WORKDIR /app
 COPY . /app
+COPY db/rushing.json /app/db/rushing.json
 
 RUN bundle install
 
