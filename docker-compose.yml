@@ -25,6 +25,16 @@ services:
       - '5434:5432'
     environment:
       POSTGRES_PASSWORD: "postgres"
+  
+  webapp:
+    depends_on:
+      - 'web'
+    build: nfl-rushing-webapp
+    volumes:
+      - ./nfl-rushing-webapp:/app
+    ports:
+      - 8000:8000
+    command: bash -c "HOST=0 PORT=8000 yarn dev"
 
 volumes:
   pgdata:
