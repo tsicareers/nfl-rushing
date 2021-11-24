@@ -1,77 +1,89 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
-      </v-card>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+  <v-container fluid class="px-0">
+    <v-row>
+      <v-col sm="8" md="6" lg="12" xl="12">
+        <v-card>
+          <v-card-title>
+            <h1>Rushing Stats</h1>
+          </v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col sm="8" md="6" lg="6" xl="6">
+                <h3>Sort by:</h3>
+                <v-radio-group row v-model="sortMethod">
+                  <v-radio
+                    class="pr-5"
+                    v-for="(option, index) in sortOptions"
+                    :key="index"
+                    :label="option.sortRule"
+                    :value="option.value"
+                  ></v-radio>
+                </v-radio-group>
+              </v-col>
+
+              <v-col sm="8" md="6" lg="6" xl="6">
+                <v-text-field
+                  name="search"
+                  label="Search by Player Name"
+                  id="search-player"
+                  outlined
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-data-table :headers="tableHeaders" :items="stats">
+            </v-data-table>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
+
+<script>
+export default {
+  data: () => ({
+    sortMethod: 'id',
+    sortOptions: [
+      { value: 'id', sortRule: 'id' },
+      { value: 'total_rushing_yards', sortRule: 'Total Rushing Yards' },
+      { value: 'longest_rush', sortRule: 'Longest Rush' },
+      { value: 'rushing_touchdowns', sortRule: 'Rushing Touchdowns' },
+    ],
+    tableHeaders: [
+      {
+        text: 'Player',
+        align: 'start',
+        value: 'player',
+      },
+      { text: 'Team', value: 'team' },
+      { text: 'Position', value: 'pos' },
+      { text: 'Rush attempts', value: 'attempts' },
+      { text: 'Rush attempts/game', value: 'att_per_game' },
+      { text: 'Total rushing yards', value: 'total_rushing_yards' },
+      { text: 'Rushing avg yard/attempt', value: 'avg_yard_attempt' },
+      { text: 'Rushing Yards/Game', value: 'yds_per_game' },
+      { text: 'Total Rushing Touchdowns', value: 'rushing_touchdowns' },
+      { text: 'Longest Rush (T = Touchdown)', value: 'longest_rush' },
+      { text: '1st Downs', value: 'rushing_first_downs' },
+      { text: '1st Downs %', value: 'first_downs_percent' },
+      { text: 'Rushing 20+ Yards', value: 'twenty_plus_rushes' },
+      { text: 'Rushing 40+ Yards', value: 'forty_plus_rushes' },
+      { text: 'Rushing fumbles', value: 'fumbles' },
+    ],
+    stats: [],
+    current_page: "",
+    next_page: "",
+    total_pages: ""
+  }),
+  async fetch() {
+    const response = await fetch('http://localhost:3000/api/v1/stats')
+    if(response.ok){
+      const {stats, current_page, next_page, total_pages} = await response.json()
+      this.stats = stats
+      this.current_page = current_page
+      this.next_page = next_page
+      this.total_pages = total_pages
+    }
+  },
+}
+</script>

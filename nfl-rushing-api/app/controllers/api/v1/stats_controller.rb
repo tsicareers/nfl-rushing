@@ -1,9 +1,9 @@
 class Api::V1::StatsController < ApplicationController
     def index
-        @stats = params[:player].blank? ? RushStat.order(:id) : RushStat.search(params[:player])
+        @stats = params[:player].blank? ? RushStat.all : RushStat.search(params[:player])
         paginated_stats = @stats.paginate(page: params[:page], per_page: 10).order(params[:sort_by])
 
-        response = {stats: paginated_stats, current_page: paginated_stats.current_page, total_pages: paginated_stats.total_pages}
+        response = {stats: paginated_stats, current_page: paginated_stats.current_page, next_page: paginated_stats.next_page, total_pages: paginated_stats.total_pages}
         render json: response, status: :ok
     end
 
