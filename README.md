@@ -56,8 +56,9 @@ If you have any questions regarding requirements, do not hesitate to email your 
 ### Installation and running this solution
 
 The solution consists of 2 separated apps that communicate to each other.
-    * Ruby on Rails API
-    * Nuxt.Js SPA
+
+* Ruby on Rails API
+* Nuxt.Js SPA
 
 The API is responsible for listing, paginating, ordering, searching and filtering resources and also to generate the csv file
 
@@ -88,12 +89,12 @@ Make sure you have docker installed ([Docker Download](https://www.docker.com/pr
 
 4. Migrate database
    ```bash
-   docker-compose run --rm web rails db:create
+   docker-compose run --rm web rails db:migrate
    ```
     
 5. Seed database
    ```bash
-   docker-compose run --rm web rails db:create
+   docker-compose run --rm web rails db:seed
    ```
 
 6. Run everything
