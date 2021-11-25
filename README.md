@@ -59,6 +59,7 @@ The solution consists of 2 separated apps that communicate to each other.
 
 * Ruby on Rails API
 * Nuxt.Js SPA
+  
 
 The API is responsible for listing, paginating, ordering, searching and filtering resources and also to generate the csv file
 
