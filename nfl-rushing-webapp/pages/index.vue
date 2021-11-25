@@ -8,29 +8,38 @@
           </v-card-title>
           <v-card-text>
             <v-row>
-              <v-col sm="8" md="6" lg="6" xl="6">
-                <h3>Sort by:</h3>
-                <v-radio-group row v-model="sortMethod">
-                  <v-radio
-                    class="pr-5"
-                    v-for="(option, index) in sortOptions"
-                    :key="index"
-                    :label="option.sortRule"
-                    :value="option.value"
-                  ></v-radio>
-                </v-radio-group>
-              </v-col>
-
-              <v-col sm="8" md="6" lg="6" xl="6">
+              <v-spacer></v-spacer>
+              <v-col sm="8" md="3" lg="3" xl="3">
                 <v-text-field
                   name="search"
                   label="Search by Player Name"
                   id="search-player"
                   outlined
+                  v-model="searchText"
+                  @keyup.enter="fetchData"
                 ></v-text-field>
               </v-col>
+              <v-col sm="8" md="1" lg="1" xl="1">
+                <v-btn x-large icon dark @click="fetchData">
+                  <v-icon>mdi-magnify</v-icon>
+                </v-btn>
+              </v-col>
+
+              <v-col sm="2" md="2" lg="2" xl="2">
+                <v-btn block x-large @click="exportData">Export data</v-btn>
+              </v-col>
             </v-row>
-            <v-data-table :headers="tableHeaders" :items="stats">
+            <v-data-table
+              :headers="tableHeaders"
+              :items="stats"
+              :server-items-length="total_entries"
+              :loading="loading"
+              :page="current_page"
+              :options.sync="options"
+              :footer-props="{
+                'items-per-page-options': [5, 10, 15, 50],
+              }"
+            >
             </v-data-table>
           </v-card-text>
         </v-card>
@@ -71,19 +80,104 @@ export default {
       { text: 'Rushing fumbles', value: 'fumbles' },
     ],
     stats: [],
-    current_page: "",
-    next_page: "",
-    total_pages: ""
+    current_page: 1,
+    next_page: '',
+    total_entries: 0,
+    searchText: '',
+    loading: true,
+    options: {},
   }),
-  async fetch() {
-    const response = await fetch('http://localhost:3000/api/v1/stats')
-    if(response.ok){
-      const {stats, current_page, next_page, total_pages} = await response.json()
-      this.stats = stats
-      this.current_page = current_page
-      this.next_page = next_page
-      this.total_pages = total_pages
-    }
+  watch: {
+    options: {
+      handler() {
+        this.fetchData()
+      },
+    },
+    deep: true,
   },
+  methods: {
+    async fetchData() {
+      this.loading = true
+      const filter = this.buildFilter()
+      const response = await fetch(
+        `http://localhost:3000/api/v1/stats/${filter}`
+      )
+      if (response.ok) {
+        const { stats, current_page, next_page, total_entries } =
+          await response.json()
+        this.loading = false
+        this.stats = stats
+        this.current_page = current_page
+        this.next_page = next_page
+        this.total_entries = total_entries
+      }
+    },
+    buildFilter() {
+      const { page, itemsPerPage, sortBy, sortDesc } = this.options
+      let pageNumber = page
+      let query = `?page=${pageNumber}&per_page=${itemsPerPage}`
+
+      if (sortBy?.length) {
+        query += `&sort_by=${sortBy[0]}`
+      }
+
+      if (sortDesc?.length && sortDesc[0] === true) {
+        query += `&sort_order=desc`
+      }
+
+      if (this.searchText) {
+        query += `&player=${this.searchText}`
+      }
+
+      return query
+    },
+    async fetchFiltered() {
+      const filter = this.buildFilter()
+      const response = await fetch(
+        `http://localhost:3000/api/v1/stats/${filter}`
+      )
+      if (response.ok) {
+        const { stats, current_page, next_page, total_entries } =
+          await response.json()
+        this.stats = stats
+        this.current_page = current_page
+        this.next_page = next_page
+        this.total_entries = total_entries
+      }
+    },
+    async exportData() {
+      const filter = this.buildFilter()
+      const response = await fetch(
+        `http://localhost:3000/api/v1/stats/export_csv/${filter}`
+      )
+      if (response.ok) {
+        const now = new Date().toISOString().slice(0, 10)
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(new Blob([blob]))
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', `stats-${now}-export.csv`)
+        document.body.appendChild(link)
+        link.click()
+        link.parentNode.removeChild(link)
+      }
+    },
+  },
+  mounted() {
+    this.fetchData()
+  },
+  // async fetch() {
+  //   this.loading = true
+  //   const response = await fetch('http://localhost:3000/api/v1/stats')
+  //   if (response.ok) {
+  //     this.loading = false
+  //     const { stats, current_page, next_page, total_entries } =
+  //       await response.json()
+  //     this.stats = stats
+  //     this.current_page = current_page
+  //     this.next_page = next_page
+  //     this.total_entries = total_entries
+  //   }
+  // },
 }
 </script>
