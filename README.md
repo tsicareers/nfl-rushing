@@ -54,4 +54,59 @@ We will evaluate you on your ability to solve the problem defined in the require
 If you have any questions regarding requirements, do not hesitate to email your contact at theScore for clarification.
 
 ### Installation and running this solution
-... TODO
+
+The solution consists of 2 separated apps that communicate to each other.
+    * Ruby on Rails API
+    * Nuxt.Js SPA
+
+The API is responsible for listing, paginating, ordering, searching and filtering resources and also to generate the csv file
+
+The SPA is there for the user to visualize the features. Keep in mind that none of the order/filter/sort/pagination is done in the front end, it's all on the back end
+
+The user is able to sort and order by any of properties by clicking on it's respective header on the data-table
+
+The user is able to search only by player name
+
+The Export CSV button generate the csv based on the same filter parameters that you are seeing on the data-table
+
+By separating the back end and the front end we have much more flexiblity on scaling the app if needed. Also, the dockerfiles are there and we can easily deploy the app anywhere, making use of kubernetes/ECS to help scale.
+By retrieving the resources in a paginated way, we can handle a lot of data to show to the user.
+
+#### Steps to run the app
+    
+Make sure you have docker installed ([Docker Download](https://www.docker.com/products/docker-desktop))
+
+1. Clone the repo
+2. Build the containers
+    ```bash
+    docker-compose build
+    ```
+3. Create the database
+   ```bash
+   docker-compose run --rm web rails db:create
+   ```
+
+4. Migrate database
+   ```bash
+   docker-compose run --rm web rails db:create
+   ```
+    
+5. Seed database
+   ```bash
+   docker-compose run --rm web rails db:create
+   ```
+
+6. Run everything
+   ```bash
+   docker-compose up
+   ```
+
+The API will be accessible at localhost:3000
+
+The SPA will be accessible at localhost:8000
+
+
+
+
+
+
