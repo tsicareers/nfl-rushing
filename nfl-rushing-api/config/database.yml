@@ -1,0 +1,22 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV.fetch("DATABASE_HOST") { localhost } %>
+  port: <%= ENV.fetch("DATABASE_PORT") { 5432 } %>
+  username: <%= ENV.fetch("DATABASE_USERNAME") { "postgres" } %>
+  password: <%= ENV.fetch("DATABASE_PASSWORD") { "postgres" } %>
+
+development:
+  <<: *default
+  database: nfl_rushing_api_development
+
+test:
+  <<: *default
+  database: nfl_rushing_api_test
+
+production:
+  <<: *default
+  database: nfl_rushing_api_production
+  username: nfl_rushing_api
+  password: <%= ENV['NFL_RUSHING_API_DATABASE_PASSWORD'] %>
