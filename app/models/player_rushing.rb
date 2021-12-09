@@ -1,0 +1,2 @@
+class PlayerRushing < ApplicationRecord
+end
