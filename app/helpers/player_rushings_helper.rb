@@ -1,0 +1,2 @@
+module PlayerRushingsHelper
+end
