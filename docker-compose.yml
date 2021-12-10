@@ -6,6 +6,13 @@ services:
       - ./tmp/db:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=password
+  webpack:
+    build: .
+    command: ./bin/webpack --watch --progress
+    volumes:
+      - .:/app
+    ports:
+      - '3035:3035'
   web:
     build: .
     volumes:

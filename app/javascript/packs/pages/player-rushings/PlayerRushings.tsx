@@ -1,15 +1,29 @@
 import React, { useEffect, useState } from 'react'
-import { Table } from 'antd'
+import { Table, Alert, Input } from 'antd'
+
+const { Search } = Input
 
 const PlayerRushings = () => {
+  const [error, setError] = useState(null)
   const [playerRushings, setPlayerRushings] = useState([])
+  const [searchString, setSearchString] = useState('')
 
   useEffect(() => {
-    fetch('/player_rushings')
+    let queryString = ''
+
+    if(searchString) {
+      const queryParams = new URLSearchParams({
+        search: searchString
+      })
+      queryString = `?${queryParams.toString()}`
+    }
+    
+
+    fetch(`/player_rushings${queryString}`)
       .then(response => response.json())
       .then(setPlayerRushings)
-  }, [])
-  
+      .catch(setError)
+  }, [searchString])
   
   const columns = [
     {
@@ -91,13 +105,18 @@ const PlayerRushings = () => {
       title: 'Fumbles',
       dataIndex: 'fumbles',
       key: 'fumbles',
-    },
-  ];
+    }
+  ]
   
 
   return (
     <div>
-      <Table rowKey="player_name" dataSource={playerRushings} columns={columns} />;
+      {error && <Alert
+        type="error"
+        message={'Oops! Something wrong happened!'} 
+        description={error?.message || "We couldn't find out what went wrong. Please contact our support team!"} />}
+      <Search role="searchbox" placeholder="Search by player name" onSearch={setSearchString} style={{ width: '100%' }} />
+      <Table rowKey="player_name" dataSource={playerRushings} columns={columns} />
     </div>
   )
 }
