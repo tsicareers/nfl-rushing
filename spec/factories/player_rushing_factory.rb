@@ -3,21 +3,21 @@ FactoryBot.define do
     player_name { "John doe" }
     team_name { "Tassinari sports" }
     player_position { "FB" }
-    avg_rushing_attempts_per_game { 2.5 }
-    rushing_attempts { 2 }
-    total_rushing_yards { 2 }
-    avg_yards_per_attempt { 3.5 }
-    yards_per_game { 5.5 }
-    total_touchdowns { 4 }
-    longest_rush { "4" }
-    first_downs { 3 }
-    first_downs_percentage { 2.4 }
-    twenty_yards_rushes { 2 }
-    fourty_yards_rushes { 3 }
-    fumbles { 4 }
+    avg_rushing_attempts_per_game { rand(1.0..10.0) }
+    rushing_attempts { rand(1..10) }
+    total_rushing_yards { rand(1..10) }
+    avg_yards_per_attempt { rand(1.0..10.0) }
+    yards_per_game { rand(1.0..10.0) }
+    total_touchdowns { rand(1..10) }
+    longest_rush { rand(1..10).to_s }
+    first_downs { rand(1..10) }
+    first_downs_percentage { rand(1.0..10.0) }
+    twenty_yards_rushes { rand(1..10) }
+    fourty_yards_rushes { rand(1..10) }
+    fumbles { rand(1..10) }
 
     trait :longest_rush_touchdown do
-      longest_rush { "T" }
+      longest_rush { rand(1..10).to_s + "T" }
     end
   end
 end

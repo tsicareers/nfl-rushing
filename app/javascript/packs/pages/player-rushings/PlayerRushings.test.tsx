@@ -39,7 +39,7 @@ describe('Player rushings page', () => {
 
     await waitForComponentAsyncUpdate()
 
-    expect(global.fetch).toHaveBeenCalledWith('/player_rushings')
+    expect(global.fetch).toHaveBeenCalledWith('/player_rushings?')
   })
 
   describe('when the user searches for a player name', () => {
@@ -66,7 +66,7 @@ describe('Player rushings page', () => {
 
       await waitForComponentAsyncUpdate()
 
-      expect(global.fetch).toHaveBeenNthCalledWith(1, '/player_rushings')
+      expect(global.fetch).toHaveBeenNthCalledWith(1, '/player_rushings?')
       expect(global.fetch).toHaveBeenNthCalledWith(2, '/player_rushings?search=Chad+Murphy')
     })
 
@@ -158,6 +158,90 @@ describe('Player rushings page', () => {
             "We couldn't find out what went wrong. Please contact our support team!"
           )
         ).toBeInTheDocument()
+      })
+    })
+  })
+
+  describe('sorting', () => {
+    const allRushings = [{ player_name: 'name' }]
+    const ascSortedRushings = [{ player_name: 'asc' }]
+    const descSortedRushings = [{ player_name: 'desc' }]
+
+    beforeEach(() => {
+      const anyGlobal: any = global
+      anyGlobal.fetch = jest.fn()
+                            .mockReturnValueOnce(Promise.resolve({ status: 200, json: () => Promise.resolve(allRushings) }))
+                            .mockReturnValueOnce(Promise.resolve({ status: 200, json: () => Promise.resolve(ascSortedRushings) }))
+                            .mockReturnValueOnce(Promise.resolve({ status: 200, json: () => Promise.resolve(descSortedRushings) }))
+    }) 
+
+    describe('when the users clicks in total touchdowns header', () => {
+      it('fetches player rushings ordered total touch downs', async () => {
+        const component = render(<PlayerRushings />)
+    
+        await waitForComponentAsyncUpdate()
+        expect(component.getByText(allRushings[0].player_name)).toBeInTheDocument()
+
+        fireEvent.click(component.getByText('Total touchdowns'))
+  
+        await waitForComponentAsyncUpdate()
+        expect(component.getByText(ascSortedRushings[0].player_name)).toBeInTheDocument() 
+
+        fireEvent.click(component.getByText('Total touchdowns'))
+  
+        await waitForComponentAsyncUpdate()
+        expect(component.getByText(descSortedRushings[0].player_name)).toBeInTheDocument() 
+
+        expect(global.fetch).toHaveBeenNthCalledWith(1, '/player_rushings?')
+        expect(global.fetch).toHaveBeenNthCalledWith(2, '/player_rushings?sort_by=total_touchdowns&order_by=asc')
+        expect(global.fetch).toHaveBeenNthCalledWith(3, '/player_rushings?sort_by=total_touchdowns&order_by=desc')
+      })
+    })
+  
+    describe('when the users clicks in longest rush header', () => {
+      it('fetches player rushings ordered longest rush', async () => {
+        const component = render(<PlayerRushings />)
+    
+        await waitForComponentAsyncUpdate()
+        expect(component.getByText(allRushings[0].player_name)).toBeInTheDocument()
+
+        fireEvent.click(component.getByText('Longest rush'))
+
+        await waitForComponentAsyncUpdate()
+        expect(component.getByText(ascSortedRushings[0].player_name)).toBeInTheDocument() 
+
+        fireEvent.click(component.getByText('Longest rush'))
+  
+        await waitForComponentAsyncUpdate()
+        expect(component.getByText(descSortedRushings[0].player_name)).toBeInTheDocument() 
+
+        expect(global.fetch).toHaveBeenNthCalledWith(1, '/player_rushings?')
+        expect(global.fetch).toHaveBeenNthCalledWith(2, '/player_rushings?sort_by=longest_rush&order_by=asc')
+        expect(global.fetch).toHaveBeenNthCalledWith(3, '/player_rushings?sort_by=longest_rush&order_by=desc')
+      })
+    })
+  
+    describe('when the users clicks in total rushing yards', () => {
+      it('fetches player rushings ordered total rushing yards', async () => {
+        const component = render(<PlayerRushings />)
+  
+    
+        await waitForComponentAsyncUpdate()
+        expect(component.getByText(allRushings[0].player_name)).toBeInTheDocument()
+        
+        fireEvent.click(component.getByText('Total rushing yards'))
+  
+        await waitForComponentAsyncUpdate()
+        expect(component.getByText(ascSortedRushings[0].player_name)).toBeInTheDocument() 
+
+        fireEvent.click(component.getByText('Total rushing yards'))
+  
+        await waitForComponentAsyncUpdate()
+        expect(component.getByText(descSortedRushings[0].player_name)).toBeInTheDocument() 
+
+        expect(global.fetch).toHaveBeenNthCalledWith(1, '/player_rushings?')
+        expect(global.fetch).toHaveBeenNthCalledWith(2, '/player_rushings?sort_by=total_rushing_yards&order_by=asc')
+        expect(global.fetch).toHaveBeenNthCalledWith(3, '/player_rushings?sort_by=total_rushing_yards&order_by=desc')
       })
     })
   })

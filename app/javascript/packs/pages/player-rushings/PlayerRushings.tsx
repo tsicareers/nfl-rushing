@@ -7,15 +7,25 @@ const PlayerRushings = () => {
   const [error, setError] = useState(null)
   const [playerRushings, setPlayerRushings] = useState([])
   const [searchString, setSearchString] = useState('')
+  const [sortBy, setSortBy] = useState(null)
+  const [orderBy, setOrderBy] = useState(null)
 
   useEffect(() => {
-    let queryString = ''
+    let queryString = '?'
 
     if(searchString) {
       const queryParams = new URLSearchParams({
         search: searchString
       })
-      queryString = `?${queryParams.toString()}`
+      queryString += `${queryParams.toString()}`
+    }
+
+    if(sortBy) {
+      const queryParams = new URLSearchParams({
+        sort_by: sortBy,
+        order_by: orderBy
+      })
+      queryString += `${queryParams.toString()}`
     }
     
 
@@ -23,7 +33,12 @@ const PlayerRushings = () => {
       .then(response => response.json())
       .then(setPlayerRushings)
       .catch(setError)
-  }, [searchString])
+  }, [searchString, sortBy, orderBy])
+
+  const onChange = (page, filters, sorter) => {
+    setSortBy(sorter.field)
+    setOrderBy(sorter.order === 'ascend' ? 'asc' : 'desc')
+  }
   
   const columns = [
     {
@@ -60,6 +75,7 @@ const PlayerRushings = () => {
       title: 'Total rushing yards',
       dataIndex: 'total_rushing_yards',
       key: 'total_rushing_yards',
+      sorter: true
     },
     {
       title: 'Average yards per attempt',
@@ -75,11 +91,13 @@ const PlayerRushings = () => {
       title: 'Longest rush',
       dataIndex: 'longest_rush',
       key: 'longest_rush',
+      sorter: true
     },
     {
       title: 'Total touchdowns',
       dataIndex: 'total_touchdowns',
       key: 'total_touchdowns',
+      sorter: true
     },
     {
       title: '1st downs',
@@ -116,7 +134,7 @@ const PlayerRushings = () => {
         message={'Oops! Something wrong happened!'} 
         description={error?.message || "We couldn't find out what went wrong. Please contact our support team!"} />}
       <Search role="searchbox" placeholder="Search by player name" onSearch={setSearchString} style={{ width: '100%' }} />
-      <Table rowKey="player_name" dataSource={playerRushings} columns={columns} />
+      <Table onChange={onChange} rowKey="player_name" dataSource={playerRushings} columns={columns} />
     </div>
   )
 }
