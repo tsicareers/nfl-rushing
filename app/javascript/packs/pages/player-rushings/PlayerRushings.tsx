@@ -9,33 +9,46 @@ const PlayerRushings = () => {
   const [searchString, setSearchString] = useState('')
   const [sortBy, setSortBy] = useState(null)
   const [orderBy, setOrderBy] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [page, setPage] = useState(1)
+  const [totalResults, setTotalResults] = useState(0)
 
   useEffect(() => {
-    let queryString = '?'
+    const params: any = {}
+
+    if(page) {
+      params.page = page.toString()
+    }
 
     if(searchString) {
-      const queryParams = new URLSearchParams({
-        search: searchString
-      })
-      queryString += `${queryParams.toString()}`
+      params.search = searchString
     }
 
     if(sortBy) {
-      const queryParams = new URLSearchParams({
-        sort_by: sortBy,
-        order_by: orderBy
-      })
-      queryString += `${queryParams.toString()}`
+      params.sort_by = sortBy
+      params.order_by =orderBy
     }
-    
 
+    const queryParams = new URLSearchParams(params)
+    const queryString = `?${queryParams.toString()}`
+
+    setLoading(true)
     fetch(`/player_rushings${queryString}`)
       .then(response => response.json())
-      .then(setPlayerRushings)
-      .catch(setError)
-  }, [searchString, sortBy, orderBy])
+      .then(response => {
+        setPlayerRushings(response.data)
+        setTotalResults(response.pagination.total_hits)
+        setPage(Number(response.pagination.current_page))
+      })
+      .then(() => setLoading(false))
+      .catch((error) => {
+        setLoading(false)
+        setError(error)
+      })
+  }, [searchString, sortBy, orderBy, page])
 
   const onChange = (page, filters, sorter) => {
+    setPage(page.current)
     setSortBy(sorter.field)
     setOrderBy(sorter.order === 'ascend' ? 'asc' : 'desc')
   }
@@ -134,7 +147,7 @@ const PlayerRushings = () => {
         message={'Oops! Something wrong happened!'} 
         description={error?.message || "We couldn't find out what went wrong. Please contact our support team!"} />}
       <Search role="searchbox" placeholder="Search by player name" onSearch={setSearchString} style={{ width: '100%' }} />
-      <Table onChange={onChange} rowKey="player_name" dataSource={playerRushings} columns={columns} />
+      <Table loading={loading} size="small" pagination={{total: totalResults, pageSize: 20}} onChange={onChange} rowKey="player_name" dataSource={playerRushings} columns={columns} />
     </div>
   )
 }
