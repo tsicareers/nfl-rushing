@@ -56,10 +56,6 @@ RSpec.describe "PlayerRushings", type: :request do
         let!(:player_rushings_with_t) { create_list(:player_rushing, 5, :longest_rush_touchdown) }
         let!(:player_rushings_without_t) { create_list(:player_rushing, 5) }
 
-        it "disconsiders the T and orders respectively by numeric longest rush, longest rush and then ID" do
-          
-        end
-
         context "without speficic ordering" do
           it "orders by asc" do
             get "/player_rushings?sort_by=longest_rush"
@@ -170,5 +166,63 @@ RSpec.describe "PlayerRushings", type: :request do
         end
       end
     end
+
+    describe "pagination" do
+      let!(:player_rushings) { create_list(:player_rushing, 100) }
+
+      context "when receives no page parameter" do
+        it "returns the first page" do
+          get "/player_rushings"
+  
+          expect(response).to have_http_status(:ok)
+          expect(response.body).to eq(PlayerRushing.limit(20).to_json)
+        end
+      end
+
+      context "when receives a valid page parameter" do
+        let(:page) { 3 }
+        it "offsets the records accordingly" do
+          get "/player_rushings?page=#{page}"
+  
+          expect(response).to have_http_status(:ok)
+          expect(response.body).to eq(PlayerRushing.offset(20*(page-1)).limit(20).to_json)
+        end
+      end
+
+      context "when receives an invalid page parameter" do
+        let(:page) { "!abc" }
+        it "returns the first page" do
+          get "/player_rushings?page=#{page}"
+  
+          expect(response).to have_http_status(:ok)
+          expect(response.body).to eq(PlayerRushing.limit(20).to_json)
+        end
+      end
+    end
+
+    context "pagination, sorting and search" do
+      let!(:player_rushings) { create_list(:player_rushing, 100) } 
+      let!(:searchable_players) do
+        create_list(:player_rushing, 50) do |rushing, i|
+          rushing.player_name = "Mathew #{i}"
+          rushing.save
+        end
+      end
+
+      it "work with together" do
+        get "/player_rushings?search=mathew&page=2&sort_by=total_rushing_yards"
+  
+        expect(response).to have_http_status(:ok)
+
+        puts JSON.parse(response.body).map { |a| a["id"]  }
+        puts '\n'
+        puts searchable_players.sort_by{ |a| [a.total_rushing_yards, a.id] }[20..40].map(&:id)
+
+        expect(response.body).to eq(
+          searchable_players.sort_by { |a| [a.total_rushing_yards, a.id] }[20..39].to_json
+        )
+      end
+    end
+    
   end
 end
