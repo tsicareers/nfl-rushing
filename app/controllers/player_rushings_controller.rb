@@ -16,7 +16,14 @@ class PlayerRushingsController < ApplicationController
       end      
     end
     
-    render json: player_rushings.offset(offset_index*PAGE_SIZE).limit(PAGE_SIZE).to_json, status: 200
+    render json: {
+      data: player_rushings.offset(offset_index*PAGE_SIZE).limit(PAGE_SIZE),
+      pagination: {
+        current_page: page_number,
+        total_hits: player_rushings.count,
+        total_pages: (player_rushings.count / PAGE_SIZE).ceil
+      }
+    }.to_json, status: 200
   end
 
   private
