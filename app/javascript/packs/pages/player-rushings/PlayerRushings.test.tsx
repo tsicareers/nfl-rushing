@@ -18,11 +18,26 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
+const mockResponse = jest.fn();
+    Object.defineProperty(window, "location", {
+      value: {
+        hash: {
+          endsWith: mockResponse,
+          includes: mockResponse
+        },
+        assign: mockResponse
+      },
+      writable: true
+    });
+
 describe('Player rushings page', () => {
   beforeEach(() => {
+    global.URL.createObjectURL = jest.fn();
+    global.URL.revokeObjectURL = jest.fn();
+
     const anyGlobal: any = global
     anyGlobal.fetch = jest.fn(() => {
-      return Promise.resolve({ status: 200, json: () => Promise.resolve([]) })
+      return Promise.resolve({ status: 200, json: () => Promise.resolve([]), blob: () => Promise.resolve('response-blob') })
     })
   })
 
@@ -307,6 +322,54 @@ describe('Player rushings page', () => {
         expect(global.fetch).toHaveBeenCalledWith('/player_rushings?page=5')
         expect(component.getByText(response.data[0].player_name)).toBeInTheDocument()
       })
+    })
+  })
+
+  describe('when clicks download button', () => {
+    it('fetches csv file from server', async () => {
+      const component = render(<PlayerRushings />)
+
+      await waitForComponentAsyncUpdate()
+
+      fireEvent.click(component.getByRole('button', { name: 'download CSV' }))
+
+      expect(global.fetch).toHaveBeenCalledWith('/player_rushings.csv?page=1', { headers: {
+        'Content-Type': 'text/csv'
+      }})
+    })
+
+    it('fetches csv file from server with sorting and search', async () => {
+      const component = render(<PlayerRushings />)
+
+      await waitForComponentAsyncUpdate()
+
+      fireEvent.click(component.getByText('Total rushing yards'))
+      await waitForComponentAsyncUpdate()
+
+      const searchBox = component.getByRole('searchbox')
+      fireEvent.change(searchBox, { target: { value: 'Chad Murphy' } })
+      const searchButton = component.getByLabelText('search')
+      fireEvent.click(searchButton)
+
+      await waitForComponentAsyncUpdate()
+
+      fireEvent.click(component.getByRole('button', { name: 'download CSV' }))
+
+      expect(global.fetch).toHaveBeenCalledWith('/player_rushings.csv?page=1&search=Chad+Murphy&sort_by=total_rushing_yards&order_by=asc', { headers: {
+        'Content-Type': 'text/csv'
+      }})
+    })
+
+    it('creates a blob with the request result', async () => {
+      const component = render(<PlayerRushings />)
+
+      await waitForComponentAsyncUpdate()
+
+      fireEvent.click(component.getByRole('button', { name: 'download CSV' }))
+
+      await waitForComponentAsyncUpdate()
+
+      expect(global.URL.createObjectURL).toHaveBeenCalledWith('response-blob')
     })
   })
 })

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Table, Alert, Input } from 'antd'
+import { Table, Alert, Input, Button, Radio } from 'antd'
+import { DownloadOutlined } from '@ant-design/icons';
 
 const { Search } = Input
 
@@ -13,7 +14,7 @@ const PlayerRushings = () => {
   const [page, setPage] = useState(1)
   const [totalResults, setTotalResults] = useState(0)
 
-  useEffect(() => {
+  const buildQueryString = () => {
     const params: any = {}
 
     if(page) {
@@ -26,14 +27,17 @@ const PlayerRushings = () => {
 
     if(sortBy) {
       params.sort_by = sortBy
-      params.order_by =orderBy
+      params.order_by = orderBy
     }
 
     const queryParams = new URLSearchParams(params)
-    const queryString = `?${queryParams.toString()}`
+    return `?${queryParams.toString()}`
 
+  }
+
+  useEffect(() => {
     setLoading(true)
-    fetch(`/player_rushings${queryString}`)
+    fetch(`/player_rushings${buildQueryString()}`)
       .then(response => response.json())
       .then(response => {
         setPlayerRushings(response.data)
@@ -51,6 +55,24 @@ const PlayerRushings = () => {
     setPage(page.current)
     setSortBy(sorter.field)
     setOrderBy(sorter.order === 'ascend' ? 'asc' : 'desc')
+  }
+
+  const downloadCsv = () => {
+    fetch(`/player_rushings.csv${buildQueryString()}`, {
+      headers: {
+        'Content-Type': 'text/csv'
+      }
+    }).then(response => response.blob())
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "player_rushings.csv";
+        document.body.appendChild(a);
+        a.click()
+        window.URL.revokeObjectURL(url);
+        a.remove();      
+    });
   }
   
   const columns = [
@@ -148,6 +170,9 @@ const PlayerRushings = () => {
         description={error?.message || "We couldn't find out what went wrong. Please contact our support team!"} />}
       <Search role="searchbox" placeholder="Search by player name" onSearch={setSearchString} style={{ width: '100%' }} />
       <Table loading={loading} size="small" pagination={{total: totalResults, pageSize: 20}} onChange={onChange} rowKey="player_name" dataSource={playerRushings} columns={columns} />
+      <Button onClick={() => downloadCsv()} role="button" type="primary" icon={<DownloadOutlined />} size="large">
+        CSV
+      </Button>
     </div>
   )
 }

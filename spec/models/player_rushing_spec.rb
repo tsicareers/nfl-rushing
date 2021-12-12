@@ -73,4 +73,18 @@ RSpec.describe PlayerRushing, type: :model do
       end
     end
   end
+
+  describe "class.to_csv" do 
+    let!(:player_rushings) { create_list(:player_rushing, 5) }
+
+    it "returns a csv file with headers" do
+      csv_string = PlayerRushing.all.to_csv
+
+      csv = CSV.parse(csv_string)
+
+      expect(csv[0]).to eq(PlayerRushing.column_names)
+      expect(csv[1]).to eq(PlayerRushing.first.values_at(*PlayerRushing.column_names).map(&:to_s))
+      expect(csv[5]).to eq(PlayerRushing.last.values_at(*PlayerRushing.column_names).map(&:to_s))
+    end
+  end
 end

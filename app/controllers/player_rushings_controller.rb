@@ -1,3 +1,5 @@
+require 'csv'
+
 class PlayerRushingsController < ApplicationController
   SORTABLE_ATTRIBUTES = %w[total_rushing_yards longest_rush total_touchdowns]
   PAGE_SIZE = 20
@@ -16,20 +18,29 @@ class PlayerRushingsController < ApplicationController
       end      
     end
     
-    render json: {
-      data: player_rushings.offset(offset_index*PAGE_SIZE).limit(PAGE_SIZE),
-      pagination: {
-        current_page: page_number,
-        total_hits: player_rushings.count,
-        total_pages: (player_rushings.count / PAGE_SIZE).ceil
-      }
-    }.to_json, status: 200
+    respond_to do |format|
+      format.json do
+          render json: {
+          data: player_rushings.offset(offset_index*PAGE_SIZE).limit(PAGE_SIZE),
+          pagination: {
+            current_page: page_number,
+            total_hits: player_rushings.count,
+            total_pages: (player_rushings.count / PAGE_SIZE).ceil
+          }
+        }.to_json, status: 200
+      end
+
+      format.csv do
+        send_data player_rushings.to_csv, type: "text/csv; charset=UTF-8; header=present", disposition: "attachment;filename=teste.csv" 
+      end
+    end
+    
   end
 
   private
 
   def index_params
-    params.permit(:search, :sort_by, :order_by, :page)
+    params.permit(:search, :sort_by, :order_by, :page, :format)
   end
 
   def has_allowed_sorting_param?
