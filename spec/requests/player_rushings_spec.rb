@@ -12,6 +12,7 @@ RSpec.shared_examples "searchable" do |expected_format|
   end
 
   context "when receives a search string" do
+    let!(:other_rushings) { create_list(:player_rushing, 5) }
     let!(:player_with_matching_name) do
       create(:player_rushing, player_name: 'Mathew Silva')
     end
@@ -176,47 +177,7 @@ RSpec.describe "PlayerRushings", type: :request do
         let(:parsed_response) { JSON.parse(response.body)["data"].to_json }
       end
 
-      describe "pagination" do
-        let!(:player_rushings) { create_list(:player_rushing, 100) }
-  
-        it "returns pagination metadata" do
-          get "/player_rushings", params: {format: :json}
-    
-            expect(response).to have_http_status(:ok)
-            expect(pagination_data["current_page"]).to eq(1)
-            expect(pagination_data["total_pages"]).to eq(5)
-            expect(pagination_data["total_hits"]).to eq(100)
-        end
-  
-        context "when receives no page parameter" do
-          it "returns the first page" do
-            get "/player_rushings", params: {format: :json}
-    
-            expect(response).to have_http_status(:ok)
-            expect(response_rushings).to eq(PlayerRushing.limit(20).to_json)
-          end
-        end
-  
-        context "when receives a valid page parameter" do
-          let(:page) { 3 }
-          it "offsets the records accordingly" do
-            get "/player_rushings?page=#{page}", params: {format: :json}
-    
-            expect(response).to have_http_status(:ok)
-            expect(response_rushings).to eq(PlayerRushing.offset(20*(page-1)).limit(20).to_json)
-          end
-        end
-  
-        context "when receives an invalid page parameter" do
-          let(:page) { "!abc" }
-          it "returns the first page" do
-            get "/player_rushings?page=#{page}", params: {format: :json}
-    
-            expect(response).to have_http_status(:ok)
-            expect(response_rushings).to eq(PlayerRushing.limit(20).to_json)
-          end
-        end
-      end
+      it_behaves_like "paginatable", "/player_rushings", PlayerRushing
 
       context "pagination, sorting and search" do
         let!(:player_rushings) { create_list(:player_rushing, 100) } 

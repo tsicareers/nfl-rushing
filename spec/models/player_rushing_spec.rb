@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe PlayerRushing, type: :model do
+  it_behaves_like "to csv-able"
+
   describe ".longest_rush_distance" do
     context "when the rush distance is not touchdown" do
       let(:player_rushing) { create(:player_rushing) }
@@ -37,7 +39,30 @@ RSpec.describe PlayerRushing, type: :model do
     end
   end
 
-  describe "class.order_by_numeric_longest_rush" do
+  describe "scope.search" do
+    let!(:other_rushings) { create_list(:player_rushing, 5) }
+    let!(:player_with_matching_name) do
+      create(:player_rushing, player_name: 'Mathew Silva')
+    end
+
+    it "searches player rushings by player name" do
+      expect(PlayerRushing.search("thew")).to match_array(PlayerRushing.where(id: player_with_matching_name.id))
+    end
+
+    context "with capital letters" do
+      it "searches player rushings by lowercase player name" do
+        expect(PlayerRushing.search("tHeW")).to match_array(PlayerRushing.where(id: player_with_matching_name.id))
+      end
+    end
+
+    context "an empty search string" do
+      it "returns all player rushings" do
+        expect(PlayerRushing.search("")).to match_array(PlayerRushing.all)
+      end
+    end
+  end
+
+  describe "scope.order_by_numeric_longest_rush" do
     let!(:player_rushings) do 
       [
         create(:player_rushing, longest_rush: '5T'),
@@ -71,20 +96,6 @@ RSpec.describe PlayerRushing, type: :model do
           PlayerRushing.all.sort_by { |p| [p.longest_rush_distance, p.longest_rush, p.id] }.reverse
         )
       end
-    end
-  end
-
-  describe "class.to_csv" do 
-    let!(:player_rushings) { create_list(:player_rushing, 5) }
-
-    it "returns a csv file with headers" do
-      csv_string = PlayerRushing.all.to_csv
-
-      csv = CSV.parse(csv_string)
-
-      expect(csv[0]).to eq(PlayerRushing.column_names)
-      expect(csv[1]).to eq(PlayerRushing.first.values_at(*PlayerRushing.column_names).map(&:to_s))
-      expect(csv[5]).to eq(PlayerRushing.last.values_at(*PlayerRushing.column_names).map(&:to_s))
     end
   end
 end
