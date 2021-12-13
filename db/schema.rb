@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_09_162649) do
+ActiveRecord::Schema.define(version: 2021_12_12_213044) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,8 @@ ActiveRecord::Schema.define(version: 2021_12_09_162649) do
     t.integer "fumbles"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["total_rushing_yards"], name: "index_player_rushings_on_total_rushing_yards"
+    t.index ["total_touchdowns"], name: "index_player_rushings_on_total_touchdowns"
   end
 
 end
